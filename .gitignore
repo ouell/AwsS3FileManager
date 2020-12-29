@@ -329,3 +329,5 @@ ASALocalRun/
 
 # MFractors (Xamarin productivity tool) working folder 
 .mfractor/
+
+AwsS3FileManager/AwsS3FileManager.Api/appsettings.Development.json
