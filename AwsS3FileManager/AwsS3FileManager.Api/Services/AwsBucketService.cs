@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Amazon.S3;
@@ -98,6 +99,41 @@ namespace AwsS3FileManager.Api.Services
             } while (response.IsTruncated);
 
             return listFile;
+        }
+
+        /// <summary>
+        /// Delete a file
+        /// </summary>
+        /// <param name="fileName">File name</param>
+        public async Task Delete(string fileName)
+        {
+            var request = new DeleteObjectRequest
+            {
+                Key = fileName,
+                BucketName = _awsSettings.BucketName
+            };
+
+            await _s3Client.DeleteObjectAsync(request);
+        }
+
+        /// <summary>
+        /// Download a file
+        /// </summary>
+        /// <param name="fileName">File name</param>
+        /// <returns>File in byte array</returns>
+        public async Task<byte[]> Download(string fileName)
+        {
+            var transferUtility = new TransferUtility(_s3Client);
+            var request = new GetObjectRequest
+            {
+                Key = fileName,
+                BucketName = _awsSettings.BucketName
+            };
+
+            var s3ObjectResponse = await transferUtility.S3Client.GetObjectAsync(request);
+            await using var ms = new MemoryStream();
+            await s3ObjectResponse.ResponseStream.CopyToAsync(ms);
+            return ms.ToArray();
         }
     }
 }
