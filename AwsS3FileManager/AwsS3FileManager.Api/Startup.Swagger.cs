@@ -34,7 +34,7 @@ namespace AwsS3FileManager.Api
         ///     Configure swagger
         /// </summary>
         /// <param name="app"></param>
-        private void ConfigureSwagger(IApplicationBuilder app)
+        private static void ConfigureSwagger(IApplicationBuilder app)
         {
             app.UseStaticFiles();
             app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "AwsS3FileManager.Api v1"));

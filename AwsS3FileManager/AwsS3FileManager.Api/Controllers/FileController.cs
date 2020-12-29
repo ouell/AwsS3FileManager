@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 using Amazon.S3;
 using AwsS3FileManager.Api.Model;
 using AwsS3FileManager.Api.Services;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AwsS3FileManager.Api.Controllers
@@ -35,15 +34,14 @@ namespace AwsS3FileManager.Api.Controllers
         /// <summary>
         /// Upload a file to s3 bucket
         /// </summary>
-        /// <param name="file">File name</param>
-        /// <param name="tag">File tag</param>
+        /// <param name="request">Request data for upload file</param>
         [HttpPost("upload")]
         [ProducesResponseType((int)HttpStatusCode.OK)]
-        public async Task<IActionResult> Upload([FromForm] IFormFile file, string tag)
+        public async Task<IActionResult> Upload([FromForm] AwsFileUploadRequestDto request)
         {
             try
             {
-                await _awsBucketService.Upload(file, tag);
+                await _awsBucketService.Upload(request.File, request.Tag);
                 return Ok();
             }
             catch (AmazonS3Exception e)

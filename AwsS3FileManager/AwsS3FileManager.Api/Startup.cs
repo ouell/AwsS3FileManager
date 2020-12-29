@@ -17,8 +17,9 @@ namespace AwsS3FileManager.Api
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllers();
+            ConfigureControllers(services);
             ConfigureSwagger(services);
+            ConfigureApplication(services);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -26,14 +27,10 @@ namespace AwsS3FileManager.Api
                               IWebHostEnvironment env)
         {
             ConfigureSwagger(app);
-
             app.UseHttpsRedirection();
-
             app.UseRouting();
-
             app.UseAuthorization();
-
-            app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
+            ConfigureControllers(app);
         }
     }
 }
