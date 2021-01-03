@@ -104,5 +104,30 @@ namespace AwsS3FileManager.Api.Controllers
                 return StatusCode((int)HttpStatusCode.InternalServerError, e.Message);
             }
         }
+
+        /// <summary>
+        /// Delete  a file
+        /// </summary>
+        /// <param name="fileName">File name</param>
+        [HttpDelete("delete/{fileName}")]
+        [ProducesResponseType((int)HttpStatusCode.OK)]
+        public async Task<IActionResult> Delete([FromRoute] string fileName)
+        {
+            try
+            {
+                await _awsBucketService.Delete(fileName);
+                return Ok();
+            }
+            catch (AmazonS3Exception e)
+            {
+                Console.WriteLine(e.Message);
+                return StatusCode((int) e.StatusCode, e.Message);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+                return StatusCode((int)HttpStatusCode.InternalServerError, e.Message);
+            }
+        }
     }
 }
